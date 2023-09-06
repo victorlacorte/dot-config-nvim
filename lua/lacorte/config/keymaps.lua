@@ -28,22 +28,8 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnos
 --vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 --vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
--- Netrw
--- Exit Netrw when running `<leader>pv` from any buffer
 vim.keymap.set('n', '<leader>pv', function()
-  for _, buf_handle in ipairs(vim.api.nvim_list_bufs()) do
-    --if vim.api.nvim_buf_is_loaded(buf_handle) and vim.api.nvim_buf_get_option(buf_handle, 'filetype') == 'netrw' then
-    if vim.api.nvim_buf_get_option(buf_handle, 'filetype') == 'netrw' then
-      vim.api.nvim_buf_call(buf_handle, function()
-        vim.cmd 'bd'
-      end)
-      --vim.cmd('bd ' .. buf_handle)
-
-      return
-    end
-  end
-
-  vim.cmd 'Lexplore %:p:h'
+  vim.cmd 'Explore'
 end, { desc = 'Toggle Netrw' })
 
 -- Don't yank with x
@@ -64,3 +50,5 @@ vim.keymap.set('n', '<leader>f', function()
     end,
   }
 end, { desc = '[F]ormat' })
+
+vim.keymap.set('n', '<Leader>u', ':UndotreeToggle<CR>', { desc = 'Toggle [U]ndoTree' })
