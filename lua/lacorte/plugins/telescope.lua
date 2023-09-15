@@ -1,22 +1,4 @@
-local is_git_repo = function()
-  vim.fn.system 'git rev-parse --is-inside-work-tree'
-
-  return vim.v.shell_error == 0
-end
-
-local get_git_root = function()
-  local dot_git_path = vim.fn.finddir('.git', '.;')
-
-  return vim.fn.fnamemodify(dot_git_path, ':h')
-end
-
-local get_cwd = function()
-  if is_git_repo() then
-    return get_git_root()
-  else
-    return vim.fn.getcwd()
-  end
-end
+local utils = require('lacorte.utils')
 
 return {
   -- Fuzzy Finder (files, lsp, etc)
@@ -79,7 +61,7 @@ return {
         function()
           local opts = { path_display = { 'truncate' } }
 
-          if is_git_repo() then
+          if utils.is_git_repo() then
             require('telescope.builtin').git_files(opts)
             return
           end
@@ -100,7 +82,7 @@ return {
       {
         '<leader>sw',
         function()
-          require('telescope.builtin').grep_string { path_display = { 'truncate' }, cwd = get_cwd() }
+          require('telescope.builtin').grep_string { path_display = { 'truncate' }, cwd = utils.get_cwd() }
         end,
         mode = 'n',
         desc = '[S]earch current [W]ord',
@@ -108,7 +90,7 @@ return {
       {
         '<leader>sg',
         function()
-          require('telescope.builtin').live_grep()
+          require('telescope.builtin').live_grep { path_display = { 'truncate' }, cwd = utils.get_cwd() }
         end,
         mode = 'n',
         desc = '[S]earch by [G]rep',
