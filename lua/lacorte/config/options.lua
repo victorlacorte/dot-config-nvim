@@ -64,3 +64,8 @@ vim.o.scrolloff = 8
 -- Having longer updatetime (default is 4,000ms) leads to noticeable delays and
 -- poor user experience.
 vim.o.updatetime = 50
+
+-- Folding: https://github.com/nvim-treesitter/nvim-treesitter#folding
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.o.foldenable = false
