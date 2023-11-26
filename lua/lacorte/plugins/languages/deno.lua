@@ -9,18 +9,18 @@ return {
     --end,
   },
   {
-    'jose-elias-alvarez/null-ls.nvim',
-    opts = function(_, opts)
-      if type(opts.sources) == 'table' then
-        local nls = require 'null-ls'
+    --'jose-elias-alvarez/null-ls.nvim',
+    --opts = function(_, opts)
+    --  if type(opts.sources) == 'table' then
+    --    local nls = require 'null-ls'
 
-        table.insert(
-          opts.sources,
-          nls.builtins.formatting.deno_fmt.with {
-            filetypes = { 'markdown' },
-          }
-        )
-      end
-    end,
+    --    table.insert(
+    --      opts.sources,
+    --      nls.builtins.formatting.deno_fmt.with {
+    --        filetypes = { 'markdown' },
+    --      }
+    --    )
+    --  end
+    --end,
   },
 }

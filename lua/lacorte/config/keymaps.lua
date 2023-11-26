@@ -43,7 +43,7 @@ vim.keymap.set('n', '<C-k>', '<cmd>cprev<CR>zz')
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 
-vim.keymap.set('n', '<leader>f', function()
+vim.keymap.set({ 'n', 'v' }, '<leader>f', function()
   vim.lsp.buf.format {
     filter = function(client)
       return client.name ~= 'tsserver'

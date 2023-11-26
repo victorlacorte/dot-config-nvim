@@ -16,7 +16,7 @@ return {
         table.insert(
           opts.sources,
           nls.builtins.formatting.prettierd.with {
-            disabled_filetypes = { 'markdown', 'yaml' },
+            disabled_filetypes = { 'yaml' },
             prefer_local = 'node_modules/.bin',
           }
         )
