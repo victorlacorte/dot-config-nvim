@@ -1,4 +1,4 @@
-local utils = require('lacorte.utils')
+local utils = require 'lacorte.utils'
 
 return {
   -- Fuzzy Finder (files, lsp, etc)
@@ -90,7 +90,14 @@ return {
       {
         '<leader>sg',
         function()
-          require('telescope.builtin').live_grep { path_display = { 'truncate' }, cwd = utils.get_cwd() }
+          require('telescope.builtin').live_grep {
+            path_display = { 'truncate' },
+            cwd = utils.get_cwd(),
+            -- Forward args to ripgrep
+            additional_args = function(opts)
+              return vim.list_extend(opts, { '--hidden', '--glob=!.git/' })
+            end,
+          }
         end,
         mode = 'n',
         desc = '[S]earch by [G]rep',

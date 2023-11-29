@@ -15,9 +15,9 @@ end
 function M.get_cwd()
   if M.is_git_repo() then
     return get_git_root()
-  else
-    return vim.fn.getcwd()
   end
+
+  return vim.fn.getcwd()
 end
 
 return M
