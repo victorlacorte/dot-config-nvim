@@ -7,20 +7,20 @@ vim.g.maplocalleader = ' '
 -- Install package manager
 --    https://github.com/folke/lazy.nvim
 --    `:help lazy.nvim.txt` for more info
-local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system {
+  vim.fn.system({
     'git',
     'clone',
     '--filter=blob:none',
     'https://github.com/folke/lazy.nvim.git',
     '--branch=stable', -- latest stable release
     lazypath,
-  }
+  })
 end
 vim.opt.rtp:prepend(lazypath)
 
-local utils = require 'lacorte.utils'
+local utils = require('lacorte.utils')
 
 require('lazy').setup({
   -- Git related plugins
@@ -68,9 +68,24 @@ require('lazy').setup({
         changedelete = { text = '~' },
       },
       on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>gp', require('gitsigns').prev_hunk, { buffer = bufnr, desc = '[G]o to [P]revious Hunk' })
-        vim.keymap.set('n', '<leader>gn', require('gitsigns').next_hunk, { buffer = bufnr, desc = '[G]o to [N]ext Hunk' })
-        vim.keymap.set('n', '<leader>ph', require('gitsigns').preview_hunk, { buffer = bufnr, desc = '[P]review [H]unk' })
+        vim.keymap.set(
+          'n',
+          '<leader>gp',
+          require('gitsigns').prev_hunk,
+          { buffer = bufnr, desc = '[G]o to [P]revious Hunk' }
+        )
+        vim.keymap.set(
+          'n',
+          '<leader>gn',
+          require('gitsigns').next_hunk,
+          { buffer = bufnr, desc = '[G]o to [N]ext Hunk' }
+        )
+        vim.keymap.set(
+          'n',
+          '<leader>ph',
+          require('gitsigns').preview_hunk,
+          { buffer = bufnr, desc = '[P]review [H]unk' }
+        )
       end,
     },
   },
@@ -82,7 +97,7 @@ require('lazy').setup({
     opts = { style = 'moon' },
     config = function(_, opts)
       require('tokyonight').setup(opts)
-      vim.cmd.colorscheme 'tokyonight'
+      vim.cmd.colorscheme('tokyonight')
     end,
   },
 
@@ -120,8 +135,8 @@ require('lazy').setup({
   { import = 'lacorte.plugins.languages' },
 }, {})
 
-require 'lacorte.config.options'
-require 'lacorte.config.keymaps'
+require('lacorte.config.options')
+require('lacorte.config.keymaps')
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

@@ -19,8 +19,8 @@ vim.o.mouse = 'a'
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-if has 'macunix' then
-  vim.opt.clipboard:append { 'unnamedplus' }
+if has('macunix') then
+  vim.opt.clipboard:append({ 'unnamedplus' })
 end
 
 -- Enable break indent
@@ -28,7 +28,7 @@ vim.o.breakindent = true
 
 -- Save undo history
 vim.o.undofile = true
-vim.o.undodir = os.getenv 'HOME' .. '/.vim/undodir'
+vim.o.undodir = os.getenv('HOME') .. '/.vim/undodir'
 vim.o.swapfile = false
 
 -- Case-insensitive searching UNLESS \C or capital in search
@@ -52,7 +52,7 @@ vim.o.termguicolors = true
 -- When moving files on linux and macOS across different directories it is necessary to set g:netrw_keepdir to zero
 -- TODO create file in the current working directory
 -- TODO recursively remove non-empty directories
-if has 'macunix' then
+if has('macunix') then
   vim.g.netrw_keepdir = 0
 end
 

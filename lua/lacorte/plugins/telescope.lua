@@ -1,4 +1,4 @@
-local utils = require 'lacorte.utils'
+local utils = require('lacorte.utils')
 
 return {
   -- Fuzzy Finder (files, lsp, etc)
@@ -11,7 +11,7 @@ return {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
         cond = function()
-          return vim.fn.executable 'make' == 1
+          return vim.fn.executable('make') == 1
         end,
       },
     },
@@ -39,7 +39,7 @@ return {
       {
         '<leader><space>',
         function()
-          require('telescope.builtin').buffers { path_display = { 'truncate' } }
+          require('telescope.builtin').buffers({ path_display = { 'truncate' } })
         end,
         mode = 'n',
         desc = '[ ] Find existing buffers',
@@ -48,10 +48,12 @@ return {
         '<leader>/',
         function()
           -- You can pass additional configuration to telescope to change theme, layout, etc.
-          require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-            winblend = 10,
-            previewer = false,
-          })
+          require('telescope.builtin').current_buffer_fuzzy_find(
+            require('telescope.themes').get_dropdown({
+              winblend = 10,
+              previewer = false,
+            })
+          )
         end,
         mode = 'n',
         desc = '[/] Fuzzily search in current buffer',
@@ -82,7 +84,10 @@ return {
       {
         '<leader>sw',
         function()
-          require('telescope.builtin').grep_string { path_display = { 'truncate' }, cwd = utils.get_cwd() }
+          require('telescope.builtin').grep_string({
+            path_display = { 'truncate' },
+            cwd = utils.get_cwd(),
+          })
         end,
         mode = 'n',
         desc = '[S]earch current [W]ord',
@@ -90,14 +95,14 @@ return {
       {
         '<leader>sg',
         function()
-          require('telescope.builtin').live_grep {
+          require('telescope.builtin').live_grep({
             path_display = { 'truncate' },
             cwd = utils.get_cwd(),
             -- Forward args to ripgrep
             additional_args = function(opts)
               return vim.list_extend(opts, { '--hidden', '--glob=!.git/' })
             end,
-          }
+          })
         end,
         mode = 'n',
         desc = '[S]earch by [G]rep',
@@ -115,7 +120,7 @@ return {
 
     config = function()
       -- Enable telescope fzf native, if installed
-      require('telescope').load_extension 'fzf'
+      require('telescope').load_extension('fzf')
     end,
   },
 
@@ -128,7 +133,7 @@ return {
     --       refer to the README for telescope-fzf-native for more instructions.
     build = 'make',
     cond = function()
-      return vim.fn.executable 'make' == 1
+      return vim.fn.executable('make') == 1
     end,
   },
 }

@@ -9,7 +9,15 @@ return {
     event = { 'BufReadPost', 'BufNewFile' },
     cmd = { 'TSUpdateSync' },
     opts = {
-      ensure_installed = { 'bash', 'lua', 'luadoc', 'luap', 'markdown', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'bash',
+        'lua',
+        'luadoc',
+        'luap',
+        'markdown',
+        'vim',
+        'vimdoc',
+      },
       highlight = { enable = true },
       indent = { enable = true },
       incremental_selection = {

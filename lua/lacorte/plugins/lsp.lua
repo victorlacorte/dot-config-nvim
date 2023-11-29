@@ -19,27 +19,27 @@ return {
     config = function()
       -- [[ Configure nvim-cmp ]]
       -- See `:help cmp`
-      local cmp = require 'cmp'
-      local luasnip = require 'luasnip'
+      local cmp = require('cmp')
+      local luasnip = require('luasnip')
       require('luasnip.loaders.from_vscode').lazy_load()
-      luasnip.config.setup {}
+      luasnip.config.setup({})
 
-      cmp.setup {
+      cmp.setup({
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
           end,
         },
-        mapping = cmp.mapping.preset.insert {
+        mapping = cmp.mapping.preset.insert({
           ['<C-n>'] = cmp.mapping.select_next_item(),
           ['<C-p>'] = cmp.mapping.select_prev_item(),
           ['<C-d>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete {},
-          ['<CR>'] = cmp.mapping.confirm {
+          ['<C-Space>'] = cmp.mapping.complete({}),
+          ['<CR>'] = cmp.mapping.confirm({
             -- behavior = cmp.ConfirmBehavior.Replace,
             select = true,
-          },
+          }),
           ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.select_next_item()
@@ -58,7 +58,7 @@ return {
               fallback()
             end
           end, { 'i', 's' }),
-        },
+        }),
         sources = {
           { name = 'nvim_lsp' },
           { name = 'buffer' },
@@ -66,7 +66,7 @@ return {
           { name = 'path' },
           { name = 'emoji' },
         },
-      }
+      })
     end,
   },
 
@@ -138,8 +138,16 @@ return {
         nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-        nmap('<leader>gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-        nmap('<leader>gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+        nmap(
+          '<leader>gd',
+          require('telescope.builtin').lsp_definitions,
+          '[G]oto [D]efinition'
+        )
+        nmap(
+          '<leader>gr',
+          require('telescope.builtin').lsp_references,
+          '[G]oto [R]eferences'
+        )
         --nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
         --nmap('<leader>D', require('telescope.builtin').lsp_type_definitions', 'Type [D]efinition')
         --nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
@@ -164,13 +172,13 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-      local mason_lspconfig = require 'mason-lspconfig'
+      local mason_lspconfig = require('mason-lspconfig')
 
-      mason_lspconfig.setup {
+      mason_lspconfig.setup({
         ensure_installed = vim.tbl_keys(servers),
-      }
+      })
 
-      mason_lspconfig.setup_handlers {
+      mason_lspconfig.setup_handlers({
         function(server)
           local server_opts = vim.tbl_deep_extend('force', {
             capabilities = capabilities,
@@ -179,7 +187,7 @@ return {
 
           require('lspconfig')[server].setup(server_opts)
         end,
-      }
+      })
     end,
   },
 
@@ -197,7 +205,7 @@ return {
     config = function(_, opts)
       require('mason').setup(opts)
 
-      local mr = require 'mason-registry'
+      local mr = require('mason-registry')
 
       local ensure_installed = function()
         for _, tool in ipairs(opts.ensure_installed) do
@@ -221,9 +229,14 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = { 'mason.nvim' },
     opts = function()
-      local nls = require 'null-ls'
+      local nls = require('null-ls')
       return {
-        root_dir = require('null-ls.utils').root_pattern('.null-ls-root', '.neoconf.json', 'Makefile', '.git'),
+        root_dir = require('null-ls.utils').root_pattern(
+          '.null-ls-root',
+          '.neoconf.json',
+          'Makefile',
+          '.git'
+        ),
         sources = {
           --nls.builtins.formatting.fish_indent,
           --nls.builtins.diagnostics.fish,
