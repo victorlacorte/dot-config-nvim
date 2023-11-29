@@ -172,21 +172,39 @@ return {
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-      local mason_lspconfig = require('mason-lspconfig')
+      local setup = function(server)
+        local server_opts = vim.tbl_deep_extend('force', {
+          capabilities = capabilities,
+          on_attach = on_attach,
+        }, servers[server] or {})
 
-      mason_lspconfig.setup({
-        ensure_installed = vim.tbl_keys(servers),
-      })
+        require('lspconfig')[server].setup(server_opts)
+      end
 
-      mason_lspconfig.setup_handlers({
-        function(server)
-          local server_opts = vim.tbl_deep_extend('force', {
-            capabilities = capabilities,
-            on_attach = on_attach,
-          }, servers[server] or {})
+      local mslp = require('mason-lspconfig')
 
-          require('lspconfig')[server].setup(server_opts)
-        end,
+      local ensure_installed = {}
+      local all_mslp_servers = vim.tbl_keys(
+        require('mason-lspconfig.mappings.server').lspconfig_to_package
+      )
+
+      for server, server_opts in pairs(servers) do
+        if server_opts then
+          server_opts = server_opts == true and {} or server_opts
+          if
+            server_opts.mason == false
+            or not vim.tbl_contains(all_mslp_servers, server)
+          then
+            setup(server)
+          else
+            ensure_installed[#ensure_installed + 1] = server
+          end
+        end
+      end
+
+      mslp.setup({
+        ensure_installed = ensure_installed,
+        handlers = { setup },
       })
     end,
   },
