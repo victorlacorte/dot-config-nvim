@@ -15,6 +15,7 @@ return {
         'luadoc',
         'luap',
         'markdown',
+        'markdown_inline',
         'vim',
         'vimdoc',
       },
