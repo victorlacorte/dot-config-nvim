@@ -87,6 +87,11 @@ return {
           require('telescope.builtin').grep_string({
             path_display = { 'truncate' },
             cwd = utils.get_cwd(),
+
+            -- Forward args to ripgrep
+            additional_args = function(opts)
+              return vim.list_extend(opts, { '--hidden', '--glob=!.git/' })
+            end,
           })
         end,
         mode = 'n',
@@ -98,6 +103,7 @@ return {
           require('telescope.builtin').live_grep({
             path_display = { 'truncate' },
             cwd = utils.get_cwd(),
+
             -- Forward args to ripgrep
             additional_args = function(opts)
               return vim.list_extend(opts, { '--hidden', '--glob=!.git/' })
