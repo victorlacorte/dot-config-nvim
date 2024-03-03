@@ -2,6 +2,7 @@ return {
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
       'L3MON4D3/LuaSnip',
@@ -103,17 +104,29 @@ return {
         -- html = { filetypes = { 'html', 'twig', 'hbs'} },
         jsonls = {},
         lua_ls = {
-          Lua = {
-            diagnostics = {
-              -- Get the language server to recognize the `vim` global
-              globals = { 'vim' },
+          -- cmd = {...},
+          -- filetypes { ...},
+          -- capabilities = {},
+          settings = {
+            Lua = {
+              runtime = { version = 'LuaJIT' },
+              workspace = {
+                checkThirdParty = false,
+                -- Tells lua_ls where to find all the Lua files that you have loaded
+                -- for your neovim configuration.
+                library = {
+                  '${3rd}/luv/library',
+                  unpack(vim.api.nvim_get_runtime_file('', true)),
+                },
+                -- If lua_ls is really slow on your computer, you can try this instead:
+                -- library = { vim.env.VIMRUNTIME },
+              },
+              completion = {
+                callSnippet = 'Replace',
+              },
+              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
+              -- diagnostics = { disable = { 'missing-fields' } },
             },
-            workspace = {
-              -- Make the server aware of Neovim runtime files
-              library = vim.api.nvim_get_runtime_file('', true),
-              checkThirdParty = false,
-            },
-            telemetry = { enable = false },
           },
         },
       },
@@ -138,16 +151,8 @@ return {
         nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-        nmap(
-          '<leader>gd',
-          require('telescope.builtin').lsp_definitions,
-          '[G]oto [D]efinition'
-        )
-        nmap(
-          '<leader>gr',
-          require('telescope.builtin').lsp_references,
-          '[G]oto [R]eferences'
-        )
+        nmap('<leader>gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+        nmap('<leader>gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
         --nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
         --nmap('<leader>D', require('telescope.builtin').lsp_type_definitions', 'Type [D]efinition')
         --nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
@@ -184,17 +189,12 @@ return {
       local mslp = require('mason-lspconfig')
 
       local ensure_installed = {}
-      local all_mslp_servers = vim.tbl_keys(
-        require('mason-lspconfig.mappings.server').lspconfig_to_package
-      )
+      local all_mslp_servers = vim.tbl_keys(require('mason-lspconfig.mappings.server').lspconfig_to_package)
 
       for server, server_opts in pairs(servers) do
         if server_opts then
           server_opts = server_opts == true and {} or server_opts
-          if
-            server_opts.mason == false
-            or not vim.tbl_contains(all_mslp_servers, server)
-          then
+          if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
             setup(server)
           else
             ensure_installed[#ensure_installed + 1] = server
@@ -249,12 +249,7 @@ return {
     opts = function()
       local nls = require('null-ls')
       return {
-        root_dir = require('null-ls.utils').root_pattern(
-          '.null-ls-root',
-          '.neoconf.json',
-          'Makefile',
-          '.git'
-        ),
+        root_dir = require('null-ls.utils').root_pattern('.null-ls-root', '.neoconf.json', 'Makefile', '.git'),
         sources = {
           --nls.builtins.formatting.fish_indent,
           --nls.builtins.diagnostics.fish,
