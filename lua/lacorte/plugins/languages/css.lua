@@ -3,7 +3,7 @@ return {
     'nvim-treesitter/nvim-treesitter',
     opts = function(_, opts)
       if type(opts.ensure_installed) == 'table' then
-        table.insert(opts.ensure_installed, { 'css' , 'heex', 'eex'})
+        table.insert(opts.ensure_installed, { 'css' })
       end
     end,
   },
