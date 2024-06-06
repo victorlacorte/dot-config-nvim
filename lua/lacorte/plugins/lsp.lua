@@ -133,7 +133,7 @@ return {
     },
     config = function(_, opts)
       --  This function gets run when an LSP connects to a particular buffer.
-      local on_attach = function(_, bufnr)
+      local on_attach = function(client, bufnr)
         -- NOTE: Remember that lua is a real programming language, and as such it is possible
         -- to define small helper and utility functions so you don't have to repeat yourself
         -- many times.
@@ -151,19 +151,29 @@ return {
         nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-        nmap('<leader>gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+        --  To jump back, press <C-t>.
+        nmap('<leader>gd', client.name ~= 'tsserver' and require('telescope.builtin').lsp_definitions or function()
+          local position_params = vim.lsp.util.make_position_params()
+
+          vim.lsp.buf.execute_command({
+            command = '_typescript.goToSourceDefinition',
+            arguments = { vim.api.nvim_buf_get_name(0), position_params.position },
+          })
+        end, '[G]oto [D]efinition')
+
+        --nmap('<leader>gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
         nmap('<leader>gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-        --nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+        --nmap('<leader>gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
         --nmap('<leader>D', require('telescope.builtin').lsp_type_definitions', 'Type [D]efinition')
         --nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
         --nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
 
         -- See `:help K` for why this keymap
-        nmap('<leader>h', vim.lsp.buf.hover, '[H]over Documentation')
+        nmap('K', vim.lsp.buf.hover, '[H]over Documentation')
         --nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
         -- Lesser used LSP functionality
-        nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+        --nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
         --nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
         --nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
         --nmap('<leader>wl', function()
@@ -184,6 +194,21 @@ return {
         local server_opts = vim.tbl_deep_extend('force', {
           capabilities = capabilities,
           on_attach = on_attach,
+          handlers = {
+            ['workspace/executeCommand'] = function(_err, result, ctx, _config)
+              if ctx.params.command ~= '_typescript.goToSourceDefinition' then
+                return
+              end
+
+              if result == nil or #result == 0 then
+                -- Fallback to lookup for a type definition
+                require('telescope.builtin').lsp_definitions()
+                return
+              end
+
+              vim.lsp.util.jump_to_location(result[1], 'utf-8')
+            end,
+          },
         }, servers[server] or {})
 
         require('lspconfig')[server].setup(server_opts)
