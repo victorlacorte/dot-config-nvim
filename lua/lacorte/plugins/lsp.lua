@@ -152,7 +152,7 @@ return {
         nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
         --  To jump back, press <C-t>.
-        nmap('<leader>gd', client.name ~= 'tsserver' and require('telescope.builtin').lsp_definitions or function()
+        nmap('<leader>gd', client.name ~= 'ts_ls' and require('telescope.builtin').lsp_definitions or function()
           local position_params = vim.lsp.util.make_position_params()
 
           vim.lsp.buf.execute_command({

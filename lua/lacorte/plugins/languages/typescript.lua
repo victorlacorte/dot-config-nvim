@@ -11,8 +11,9 @@ return {
     'neovim/nvim-lspconfig',
     opts = {
       servers = {
-        tsserver = {
+        ts_ls = {
           -- https://github.com/typescript-language-server/typescript-language-server#initializationoptions
+          -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#ts_ls
           init_options = {
             hostInfo = 'neovim',
             plugins = {

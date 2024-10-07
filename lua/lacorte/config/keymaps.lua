@@ -55,7 +55,7 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 vim.keymap.set({ 'n', 'v' }, '<leader>f', function()
   vim.lsp.buf.format({
     filter = function(client)
-      return client.name ~= 'tsserver'
+      return client.name ~= 'ts_ls'
     end,
   })
 end, { desc = '[F]ormat' })
