@@ -20,15 +20,9 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local utils = require('lacorte.utils')
-
 require('lazy').setup({
-  -- Detect tabstop and shiftwidth automatically
-  -- 'tpope/vim-sleuth',
-
-  -- Git related plugins
-  'tpope/vim-fugitive',
-  'tpope/vim-rhubarb',
+  -- NOTE: notice this is repeated below
+  'sindrets/diffview.nvim',
 
   {
     'NeogitOrg/neogit',
@@ -41,7 +35,7 @@ require('lazy').setup({
     keys = {
       {
         '<leader>gs',
-        ':Neogit cwd=' .. utils.get_cwd() .. '<CR>',
+        ':Neogit<CR>',
         mode = 'n',
         desc = 'Neo[g]it [s]how',
       },
