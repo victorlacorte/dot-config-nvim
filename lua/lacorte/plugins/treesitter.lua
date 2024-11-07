@@ -11,6 +11,8 @@ return {
     opts = {
       ensure_installed = {
         'bash',
+        'json',
+        'jsonc',
         'lua',
         'luadoc',
         'luap',
@@ -18,6 +20,7 @@ return {
         'markdown_inline',
         'vim',
         'vimdoc',
+        'yaml'
       },
       highlight = { enable = true },
       indent = { enable = true },

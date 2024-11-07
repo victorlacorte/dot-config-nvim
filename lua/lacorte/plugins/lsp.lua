@@ -272,7 +272,8 @@ return {
 
   {
     'nvimtools/none-ls.nvim',
-    event = { 'BufReadPre', 'BufNewFile' },
+    -- Copied from LazyVim/lua/lazyvim/util/plugin.lua
+    event = { 'BufReadPost', 'BufNewFile', 'BufWritePre' },
     dependencies = {
       'mason.nvim',
       'nvimtools/none-ls-extras.nvim',
