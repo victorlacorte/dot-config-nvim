@@ -13,8 +13,10 @@ return {
       if type(opts.sources) == 'table' then
         -- https://github.com/mantoni/eslint_d.js/issues/311
         -- https://github.com/L2jLiga/nvim-none-ls-eslint_d/blob/master/lua/plugins/none-ls.lua
-        table.insert(opts.sources, require('none-ls.code_actions.eslint_d'))
-        table.insert(opts.sources, require('none-ls.diagnostics.eslint_d'))
+        -- vim.env.ESLINT_D_PPID = vim.fn.getpid()
+        --
+        -- table.insert(opts.sources, require('none-ls.code_actions.eslint_d'))
+        -- table.insert(opts.sources, require('none-ls.diagnostics.eslint_d'))
       end
     end,
   },

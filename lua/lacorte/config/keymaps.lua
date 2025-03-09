@@ -22,6 +22,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Trim trailing whitespace when yanking text.
+-- The main motivator for this is pasting into Telescope boxes (e.g. "Git files", "Live grep") from the shared OS clipboard.
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Trim final newline character',
+  group = vim.api.nvim_create_augroup('kickstart-trim-on-yank', { clear = true }),
+  callback = function()
+    if vim.v.event.operator == 'y' then
+      vim.fn.setreg('+', vim.fn.trim(vim.fn.getreg('+')))
+    end
+  end,
+})
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })

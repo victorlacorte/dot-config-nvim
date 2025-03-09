@@ -20,7 +20,8 @@ return {
     opts = {
       servers = {
         elixirls = {
-          --https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#elixirls
+          -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#elixirls
+          cmd = { vim.fn.stdpath('data') .. '/mason/packages/elixir-ls/language_server.sh' },
         },
       },
     },

@@ -43,8 +43,13 @@ require('lazy').setup({
     config = true,
   },
 
-  -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim', opts = {} },
+  -- https://neovim.io/doc/user/various.html#commenting
+  {
+    'folke/ts-comments.nvim',
+    opts = {},
+    event = 'VeryLazy',
+    enabled = vim.fn.has('nvim-0.10.0') == 1,
+  },
 
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',

@@ -21,7 +21,9 @@ return {
               {
                 name = '@styled/typescript-styled-plugin',
                 --location = '/opt/homebrew/lib/node_modules/@styled/typescript-styled-plugin/lib/index.js'
-                location = '/Users/victor/.volta/tools/image/packages/@styled/typescript-styled-plugin/lib/node_modules/@styled/typescript-styled-plugin/lib/index.js',
+                location = vim.fn.expand(
+                  '$HOME/.volta/tools/image/packages/@styled/typescript-styled-plugin/lib/node_modules/@styled/typescript-styled-plugin/lib/index.js'
+                ),
               },
             },
           },

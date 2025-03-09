@@ -61,7 +61,6 @@ if has('macunix') then
   vim.g.netrw_keepdir = 0
 end
 
-vim.g.netrw_winsize = 30
 vim.g.netrw_banner = 0
 
 vim.o.scrolloff = 8
