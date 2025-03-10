@@ -61,3 +61,8 @@ vim.keymap.set({ 'n', 'v' }, '<leader>f', function()
 end, { desc = '[F]ormat' })
 
 vim.keymap.set('n', '<Leader>u', ':UndotreeToggle<CR>', { desc = 'Toggle [U]ndoTree' })
+
+-- https://github.com/WhoIsSethDaniel/toggle-lsp-diagnostics.nvim
+-- vim.keymap.set('n', '<Leader>td', function()
+--   vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+-- end, { silent = true, noremap = true, desc = '[T]oggle [D]iagnostic' })
