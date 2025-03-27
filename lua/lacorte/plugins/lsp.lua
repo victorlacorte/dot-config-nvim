@@ -153,9 +153,9 @@ return {
 
         --  To jump back, press <C-t>.
         nmap('<leader>gd', client.name ~= 'ts_ls' and require('telescope.builtin').lsp_definitions or function()
-          local position_params = vim.lsp.util.make_position_params()
+          local position_params = vim.lsp.util.make_position_params(0, 'utf-8')
 
-          vim.lsp.buf.execute_command({
+          client:exec_cmd({
             command = '_typescript.goToSourceDefinition',
             arguments = { vim.api.nvim_buf_get_name(0), position_params.position },
           })
@@ -206,7 +206,8 @@ return {
                 return
               end
 
-              vim.lsp.util.jump_to_location(result[1], 'utf-8')
+              -- vim.lsp.util.jump_to_location(result[1], 'utf-8')
+              vim.lsp.util.show_document(result[1], 'utf-8', { focus = true })
             end,
           },
         }, servers[server] or {})

@@ -72,3 +72,6 @@ vim.o.updatetime = 50
 vim.o.foldmethod = 'expr'
 vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.o.foldenable = false
+
+-- Does not work
+-- vim.o.winborder = 'rounded'

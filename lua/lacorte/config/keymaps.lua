@@ -23,8 +23,14 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- Diagnostic keymaps
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
+vim.keymap.set('n', '[d', function()
+  vim.diagnostic.jump({ count = -1, float = true })
+end, { desc = 'Go to previous [D]iagnostic message' })
+
+vim.keymap.set('n', ']d', function()
+  vim.diagnostic.jump({ count = 1, float = true })
+end, { desc = 'Go to next [D]iagnostic message' })
+
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
@@ -66,3 +72,12 @@ vim.keymap.set('n', '<Leader>u', ':UndotreeToggle<CR>', { desc = 'Toggle [U]ndoT
 -- vim.keymap.set('n', '<Leader>td', function()
 --   vim.diagnostic.enable(not vim.diagnostic.is_enabled())
 -- end, { silent = true, noremap = true, desc = '[T]oggle [D]iagnostic' })
+
+-- vim.api.nvim_create_autocmd('LspAttach', {
+--   callback = function(ev)
+--     local client = vim.lsp.get_client_by_id(ev.data.client_id)
+--     if client:supports_method('textDocument/completion') then
+--       vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+--     end
+--   end,
+-- })

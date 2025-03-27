@@ -1,3 +1,22 @@
+-- Rather than flat map here, properly extend on individual configs
+local function flat_map(tbl, fn)
+  local result = {}
+
+  for _, v in ipairs(tbl) do
+    local mapped = fn(v)
+
+    if type(mapped) == 'table' then
+      for _, mv in ipairs(mapped) do
+        table.insert(result, mv)
+      end
+    else
+      table.insert(result, mapped)
+    end
+  end
+
+  return result
+end
+
 return {
   {
     -- Highlight, edit, and navigate code
@@ -20,7 +39,7 @@ return {
         'markdown_inline',
         'vim',
         'vimdoc',
-        'yaml'
+        'yaml',
       },
       highlight = { enable = true },
       indent = { enable = true },
@@ -92,6 +111,11 @@ return {
           return true
         end, opts.ensure_installed)
       end
+
+      opts.ensure_installed = flat_map(opts.ensure_installed, function(v)
+        return v
+      end)
+      -- print(vim.inspect(opts.ensure_installed))
 
       require('nvim-treesitter.configs').setup(opts)
     end,

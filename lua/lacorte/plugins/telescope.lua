@@ -97,7 +97,8 @@ return {
 
             -- Forward args to ripgrep
             additional_args = function(opts)
-              return vim.list_extend(opts, { '--hidden', '--glob=!.git/' })
+              -- return vim.list_extend(opts, { '--hidden', '--glob=!.git/' })
+              return { '--hidden', '--glob=!.git/' }
             end,
           })
         end,
@@ -113,7 +114,9 @@ return {
 
             -- Forward args to ripgrep
             additional_args = function(opts)
-              return vim.list_extend(opts, { '--hidden', '--glob=!.git/' })
+              -- return vim.list_extend(opts, { '--hidden', '--glob=!.git/' })
+
+              return { '--hidden', '--glob=!.git/' }
             end,
           })
         end,
