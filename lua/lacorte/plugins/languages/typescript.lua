@@ -10,7 +10,7 @@ return {
     'nvim-treesitter/nvim-treesitter',
     opts = function(_, opts)
       if type(opts.ensure_installed) == 'table' then
-        table.insert(opts.ensure_installed, { 'javascript', 'jsdoc', 'typescript', 'tsx' })
+        vim.list_extend(opts.ensure_installed, { 'javascript', 'jsdoc', 'typescript', 'tsx' })
       end
     end,
   },

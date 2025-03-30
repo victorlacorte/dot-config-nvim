@@ -69,9 +69,23 @@ vim.o.scrolloff = 8
 vim.o.updatetime = 50
 
 -- Folding: https://github.com/nvim-treesitter/nvim-treesitter#folding
-vim.o.foldmethod = 'expr'
-vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
-vim.o.foldenable = false
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.wo.foldenable = false
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+    if client and client:supports_method('textDocument/foldingRange') then
+      local win = vim.api.nvim_get_current_win()
+
+      vim.wo[win][0].foldmethod = 'expr'
+      vim.wo[win][0].foldexpr = 'v:lua.vim.lsp.foldexpr()'
+    end
+  end,
+})
+vim.api.nvim_create_autocmd('LspDetach', { command = 'setl foldexpr<' })
 
 -- Does not work
 -- vim.o.winborder = 'rounded'
