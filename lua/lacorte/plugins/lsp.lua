@@ -1,74 +1,65 @@
 return {
   {
-    -- Autocompletion
-    'hrsh7th/nvim-cmp',
-    event = 'InsertEnter',
+    'saghen/blink.cmp',
+    event = 'VimEnter',
+    version = '1.*',
     dependencies = {
-      -- Snippet Engine & its associated nvim-cmp source
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
-
-      -- Adds LSP completion capabilities
-      'hrsh7th/cmp-buffer',
-      'hrsh7th/cmp-emoji',
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-path',
+      -- Snippet Engine
+      { 'L3MON4D3/LuaSnip', version = '2.*', opts = {} },
 
       -- Adds a number of user-friendly snippets
       'rafamadriz/friendly-snippets',
+      'folke/lazydev.nvim',
     },
-    config = function()
-      -- [[ Configure nvim-cmp ]]
-      -- See `:help cmp`
-      local cmp = require('cmp')
-      local luasnip = require('luasnip')
-      require('luasnip.loaders.from_vscode').lazy_load()
-      luasnip.config.setup({})
 
-      cmp.setup({
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      -- https://cmp.saghen.dev/
+      keymap = {
+        preset = 'default',
+      },
+      appearance = {
+        -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
+        -- Adjusts spacing to ensure icons are aligned
+        nerd_font_variant = 'mono',
+      },
+
+      completion = {
+        -- By default, press `<C-space>` to toggle the documentation.
+        documentation = {
+          auto_show = true,
+          auto_show_delay_ms = 150,
         },
-        mapping = cmp.mapping.preset.insert({
-          ['<C-n>'] = cmp.mapping.select_next_item(),
-          ['<C-p>'] = cmp.mapping.select_prev_item(),
-          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete({}),
-          ['<CR>'] = cmp.mapping.confirm({
-            -- behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
-          }),
-          ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_next_item()
-            elseif luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
-          ['<S-Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
-        }),
-        sources = {
-          { name = 'nvim_lsp' },
-          { name = 'buffer' },
-          { name = 'luasnip' },
-          { name = 'path' },
-          { name = 'emoji' },
+      },
+
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'buffer' },
+        providers = {
+          lazydev = {
+            name = 'LazyDev',
+            module = 'lazydev.integrations.blink',
+            score_offset = 100,
+          },
         },
-      })
-    end,
+      },
+
+      snippets = { preset = 'luasnip' },
+
+      -- Blink.cmp includes an optional, recommended rust fuzzy matcher,
+      -- which automatically downloads a prebuilt binary when enabled.
+      --
+      -- By default, we use the Lua implementation instead, but you may enable
+      -- the rust implementation via `'prefer_rust_with_warning'`
+      --
+      -- See :h blink-cmp-config-fuzzy for more information
+      fuzzy = { implementation = 'lua' },
+
+      -- Shows a signature help window while you type arguments for a function
+      signature = { enabled = true },
+    },
+
+    opts_extend = { 'sources.default' },
   },
 
   {
@@ -76,15 +67,17 @@ return {
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      'mason.nvim',
+      { 'williamboman/mason.nvim', opts = {} },
       'williamboman/mason-lspconfig.nvim',
 
       -- Useful status updates for LSP
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
       { 'folke/neodev.nvim', opts = {} },
+
+      -- Allows extra capabilities provided by blink.cmp
+      'saghen/blink.cmp',
     },
     opts = {
       -- Enable the following language servers
@@ -109,18 +102,6 @@ return {
           -- capabilities = {},
           settings = {
             Lua = {
-              runtime = { version = 'LuaJIT' },
-              workspace = {
-                checkThirdParty = false,
-                -- Tells lua_ls where to find all the Lua files that you have loaded
-                -- for your neovim configuration.
-                library = {
-                  '${3rd}/luv/library',
-                  unpack(vim.api.nvim_get_runtime_file('', true)),
-                },
-                -- If lua_ls is really slow on your computer, you can try this instead:
-                -- library = { vim.env.VIMRUNTIME },
-              },
               completion = {
                 callSnippet = 'Replace',
               },
@@ -187,8 +168,7 @@ return {
       --  By default, Neovim doesn't support everything that is in the LSP Specification.
       --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
       --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
 
       local setup = function(server)
         local server_opts = vim.tbl_deep_extend('force', {

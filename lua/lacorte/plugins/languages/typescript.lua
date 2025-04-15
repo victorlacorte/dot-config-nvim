@@ -35,7 +35,7 @@ return {
             },
             maxTsServerMemory = 8192,
           },
-          root_dir = get_root_dir,
+          -- root_dir = get_root_dir,
         },
       },
     },
